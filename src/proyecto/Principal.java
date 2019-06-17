@@ -6,7 +6,9 @@
 package proyecto;
 
 import BD.GestionBD;
+import insertar.InsertarDisco;
 import insertar.InsertarInterprete;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -15,11 +17,13 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Principal extends javax.swing.JFrame {
     GestionBD ges = new GestionBD();
+    
     /**
      * Creates new form Principal
      */
     public Principal() {
         initComponents();
+        
     }
 
     /**
@@ -35,7 +39,7 @@ public class Principal extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         taboa1 = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        taboa2 = new javax.swing.JTable();
         btnSalir = new javax.swing.JButton();
         btnMostrarD = new javax.swing.JButton();
         btnInsetar = new javax.swing.JButton();
@@ -54,7 +58,7 @@ public class Principal extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(taboa1);
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        taboa2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -62,7 +66,7 @@ public class Principal extends javax.swing.JFrame {
                 "Codigo", "ID", "Titulo", "Imagen"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(taboa2);
 
         btnSalir.setText("Salir");
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
@@ -72,6 +76,11 @@ public class Principal extends javax.swing.JFrame {
         });
 
         btnMostrarD.setText("Mostrar Discos");
+        btnMostrarD.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMostrarDActionPerformed(evt);
+            }
+        });
 
         btnInsetar.setText("Insertar");
         btnInsetar.addActionListener(new java.awt.event.ActionListener() {
@@ -88,6 +97,11 @@ public class Principal extends javax.swing.JFrame {
         });
 
         btnInsertar2.setText("Insertar");
+        btnInsertar2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInsertar2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -101,14 +115,14 @@ public class Principal extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnInsetar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(303, 303, 303)
                         .addComponent(jButton1))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 503, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 491, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnMostrarD)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnInsertar2))
                 .addContainerGap())
         );
@@ -125,12 +139,11 @@ public class Principal extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(12, 12, 12))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnMostrarD, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(90, 90, 90)))
+                                .addGap(39, 39, 39)
+                                .addComponent(btnMostrarD, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(12, 12, 12)
                         .addComponent(btnSalir))))
         );
 
@@ -166,11 +179,38 @@ public class Principal extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         DefaultTableModel ta = (DefaultTableModel) taboa1.getModel();
         ta.setRowCount(0);
-        for(Object[]datos:ges.tablas()){
+        for(Object[]datos:ges.tablaI()){
            ta.addRow(datos);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void btnInsertar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertar2ActionPerformed
+        InsertarDisco ins = new InsertarDisco();
+        Auxiliar aux = new Auxiliar();
+        int fila = taboa1.getSelectedRow();
+        
+        if (fila == -1){
+            JOptionPane.showMessageDialog(null,"Debes seleccionar un interprete");
+        }else{
+            
+            aux.setId(taboa1.getValueAt(fila, 0).toString());
+            ins.setVisible(true);
+            
+        }
+    }//GEN-LAST:event_btnInsertar2ActionPerformed
+
+    private void btnMostrarDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMostrarDActionPerformed
+        int fila = taboa1.getSelectedRow();
+        if (fila == -1){
+            JOptionPane.showMessageDialog(null,"Debes seleccionar un interprete");
+        }else{
+        DefaultTableModel ta = (DefaultTableModel) taboa2.getModel();
+        ta.setRowCount(0);
+        for(Object[]datos:ges.tablaD(taboa1.getValueAt(fila, 0).toString())){
+           ta.addRow(datos);
+        }
+    }//GEN-LAST:event_btnMostrarDActionPerformed
+    }
     /**
      * @param args the command line arguments
      */
@@ -215,7 +255,7 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTable taboa1;
+    private javax.swing.JTable taboa2;
     // End of variables declaration//GEN-END:variables
 }

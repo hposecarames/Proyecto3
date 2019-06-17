@@ -40,22 +40,29 @@ public class GestionBD {
                 + "	genero text NOT NULL, \n"
                 + "     image BLOB \n"
                 + " );";
+        
         String sql2 = "CREATE TABLE IF NOT EXISTS discos (\n"
                 + "	codigo integer PRIMARY KEY,\n"
-                + "     id integer FOREIGN KEY, \n"
-                + "	nombre text NOT NULL, \n"
-                + "     image BLOB \n"
+                + "     id integer NOT NULL, \n"                 
+                + "	titulo text NOT NULL, \n"
+                + "     image BLOB, \n"
+                + "     FOREIGN KEY(id) REFERENCES interprete(id) \n"
                 + " );";
+        
         String sql3 = "CREATE TABLE IF NOT EXISTS canciones (\n"
                 + "	id integer PRIMARY KEY,\n"
-                + "     codigo integer FOREIGN KEY, \n"
+                + "     codigo integer, \n"
                 + "	nombre text NOT NULL, \n"
-                + "     image BLOB \n"
+                + "     image BLOB, \n"
+                +"      FOREIGN KEY(codigo) REFERENCES discos(codigo) \n"
                 + " );";
+        
         try (Connection conn = DriverManager.getConnection(url);
                 Statement stmt = conn.createStatement()) {
             // creamos la tabla cargando nuestra sentencia en la variable sql
             stmt.execute(sql);
+            stmt.execute(sql2);
+            stmt.execute(sql3);
             conex = true;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -93,9 +100,9 @@ public class GestionBD {
 
     }
 
-    public ArrayList<Object[]> tablas() {
+    public ArrayList<Object[]> tablaI() {
         FileOutputStream fos = null;
-        ArrayList<Object[]> tablas = new ArrayList<>();
+        ArrayList<Object[]> tablaI = new ArrayList<>();
         String sql = "SELECT id, nombre, genero, image FROM interprete";
 
         try (Connection conn = GeneralBD.connect();
@@ -117,13 +124,75 @@ public class GestionBD {
                 datos[2] = rs.getString("genero");
                 datos[3] = file;
 
-                tablas.add(datos);
+                tablaI.add(datos);
             }
 
         } catch (SQLException | IOException ex) {
             Logger.getLogger(GestionBD.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return tablas;
+        return tablaI;
+    }
+        public ArrayList<Object[]> tablaD(String id) {
+        FileOutputStream fos = null;
+        ArrayList<Object[]> tablaD = new ArrayList<>();
+        String sql = "SELECT id, codigo, titulo, image FROM discos where id="+id;
+
+        try (Connection conn = GeneralBD.connect();
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                File file = new File("/home/menuven/NuevaI/Imagen.jpg");
+                file.createNewFile();
+                fos = new FileOutputStream(file);
+                InputStream input = rs.getBinaryStream("image");
+                byte[] buffer = new byte[1024];
+                while (input.read(buffer) > 0) {
+                    fos.write(buffer);
+                }
+                Object[] datos = new Object[4];
+                datos[0] = Integer.toString(rs.getInt("id"));
+                datos[1] = Integer.toString(rs.getInt("codigo"));
+                datos[2] = rs.getString("titulo");
+                datos[3] = file;
+
+                tablaD.add(datos);
+            }
+
+        } catch (SQLException | IOException ex) {
+            Logger.getLogger(GestionBD.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return tablaD;
+    }
+    public void insertD(Integer codigo, Integer id, String titulo, String ruta) throws FileNotFoundException, IOException {
+        String sql = "insert into discos(codigo,id,titulo,image) values(?,?,?,?)";
+        Connection conn = GeneralBD.connect();
+        FileInputStream fi = null;
+        PreparedStatement pstmt = null;
+
+        try {
+
+            File file = new File(ruta);
+            fi = new FileInputStream(file);
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            byte[] buf = new byte[1024];
+            for (int i; (i = fi.read(buf)) != -1;) {
+                bos.write(buf, 0, i);
+            }
+
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, codigo);
+            pstmt.setInt(2, id);
+            pstmt.setString(3, titulo);
+            pstmt.setBytes(4, bos.toByteArray());
+            pstmt.executeUpdate();
+            System.out.println("yep");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+
+        }
+
     }
 }
