@@ -6,8 +6,15 @@
 package proyecto;
 
 import BD.GestionBD;
+import Utilidades.Imagenes;
+import insertar.InsertarCancion;
 import insertar.InsertarDisco;
 import insertar.InsertarInterprete;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -16,14 +23,15 @@ import javax.swing.table.DefaultTableModel;
  * @author Hector Pose Carames
  */
 public class Principal extends javax.swing.JFrame {
+
     GestionBD ges = new GestionBD();
-    
+
     /**
      * Creates new form Principal
      */
     public Principal() {
         initComponents();
-        
+
     }
 
     /**
@@ -43,8 +51,10 @@ public class Principal extends javax.swing.JFrame {
         btnSalir = new javax.swing.JButton();
         btnMostrarD = new javax.swing.JButton();
         btnInsetar = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btnActualizar = new javax.swing.JButton();
         btnInsertar2 = new javax.swing.JButton();
+        btnMostrarC = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -56,6 +66,7 @@ public class Principal extends javax.swing.JFrame {
                 "ID", "Nombre", "Genero", "Imagen"
             }
         ));
+        taboa1.setRowHeight(40);
         jScrollPane1.setViewportView(taboa1);
 
         taboa2.setModel(new javax.swing.table.DefaultTableModel(
@@ -66,6 +77,7 @@ public class Principal extends javax.swing.JFrame {
                 "Codigo", "ID", "Titulo", "Imagen"
             }
         ));
+        taboa2.setRowHeight(40);
         jScrollPane2.setViewportView(taboa2);
 
         btnSalir.setText("Salir");
@@ -89,10 +101,10 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Actualizar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnActualizar.setText("Actualizar");
+        btnActualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnActualizarActionPerformed(evt);
             }
         });
 
@@ -100,6 +112,20 @@ public class Principal extends javax.swing.JFrame {
         btnInsertar2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnInsertar2ActionPerformed(evt);
+            }
+        });
+
+        btnMostrarC.setText("Mostrar Canciones");
+        btnMostrarC.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMostrarCActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("InsertarC");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
             }
         });
 
@@ -112,18 +138,23 @@ public class Principal extends javax.swing.JFrame {
                 .addComponent(btnSalir))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnInsetar)
-                        .addGap(303, 303, 303)
-                        .addComponent(jButton1))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 491, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnActualizar))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnMostrarD)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnMostrarC, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnMostrarD, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 392, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnInsertar2))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnInsertar2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton2)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -132,8 +163,9 @@ public class Principal extends javax.swing.JFrame {
                 .addContainerGap(101, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnInsetar)
-                    .addComponent(jButton1)
-                    .addComponent(btnInsertar2))
+                    .addComponent(btnActualizar)
+                    .addComponent(btnInsertar2)
+                    .addComponent(jButton2))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -141,8 +173,10 @@ public class Principal extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(39, 39, 39)
-                                .addComponent(btnMostrarD, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(36, 36, 36)
+                                .addComponent(btnMostrarD, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnMostrarC, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(12, 12, 12)
                         .addComponent(btnSalir))))
         );
@@ -173,44 +207,113 @@ public class Principal extends javax.swing.JFrame {
 
     private void btnInsetarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsetarActionPerformed
         InsertarInterprete ins = new InsertarInterprete();
-        ins.setVisible(true);
+        ins.setVisible(true);        
     }//GEN-LAST:event_btnInsetarActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
+        taboa1.setDefaultRenderer(Object.class, new Imagenes());
+        String[]nombreColumnas={"ID","Nombre","Genero","Imagen"};
         DefaultTableModel ta = (DefaultTableModel) taboa1.getModel();
-        ta.setRowCount(0);
-        for(Object[]datos:ges.tablaI()){
-           ta.addRow(datos);
-        }
-    }//GEN-LAST:event_jButton1ActionPerformed
+        ta = new DefaultTableModel(ges.tablaI(),nombreColumnas){
+            @Override
+            public Class getColumnClass(int column)
+            {
+//                if (column==nombreColumnas.length-1){
+//                return Icon.class;
+//                }
+                return getValueAt(0, column).getClass();
+            }};
+        
+        taboa1.setModel(ta);
+        taboa1.setPreferredScrollableViewportSize(taboa1.getPreferredSize());
+//        ta.setRowCount(0);
+//        ArrayList<Object[]> datosTabla = ges.tablaI();
+//        for (int i=0;i<datosTabla.size();i++) {
+//            Object[]datos=datosTabla.get(i);
+//            ta.addRow(datos);
+//            taboa1.setValueAt(datos[datos.length-1], i, 3);
+            
+        
+    }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void btnInsertar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertar2ActionPerformed
-        InsertarDisco ins = new InsertarDisco();
-        Auxiliar aux = new Auxiliar();
-        int fila = taboa1.getSelectedRow();
         
-        if (fila == -1){
-            JOptionPane.showMessageDialog(null,"Debes seleccionar un interprete");
-        }else{
+        
+        int fila = taboa1.getSelectedRow();
+
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(null, "Debes seleccionar un interprete");
+        } else {
+
             
-            aux.setId(taboa1.getValueAt(fila, 0).toString());
+            InsertarDisco ins = new InsertarDisco();
             ins.setVisible(true);
-            
+            ins.txtID.setText(taboa1.getValueAt(fila, 0).toString());
+
         }
     }//GEN-LAST:event_btnInsertar2ActionPerformed
 
     private void btnMostrarDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMostrarDActionPerformed
         int fila = taboa1.getSelectedRow();
-        if (fila == -1){
-            JOptionPane.showMessageDialog(null,"Debes seleccionar un interprete");
-        }else{
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(null, "Debes seleccionar un interprete");
+        } else {
+            taboa2.setDefaultRenderer(Object.class, new Imagenes());
+        String[]nombreColumnas={"Codigo","ID","Titulo","Imagen"};
         DefaultTableModel ta = (DefaultTableModel) taboa2.getModel();
-        ta.setRowCount(0);
-        for(Object[]datos:ges.tablaD(taboa1.getValueAt(fila, 0).toString())){
-           ta.addRow(datos);
-        }
+        ta = new DefaultTableModel(ges.tablaD(taboa1.getValueAt(fila, 0).toString()),nombreColumnas){
+            @Override
+            public Class getColumnClass(int column)
+            {
+//                if (column==nombreColumnas.length-1){
+//                return Icon.class;
+//                }
+                return getValueAt(0, column).getClass();
+            }};
+        
+        taboa2.setModel(ta);
+        taboa2.setPreferredScrollableViewportSize(taboa2.getPreferredSize());
+            }
+        
     }//GEN-LAST:event_btnMostrarDActionPerformed
-    }
+
+    private void btnMostrarCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMostrarCActionPerformed
+        Canciones c = new Canciones();
+        c.setVisible(true);
+        int fila = taboa2.getSelectedRow();
+        if (fila ==-1){
+            JOptionPane.showMessageDialog(null, "Debes seleccionar un disco");
+        }else{
+            DefaultTableModel ta = (DefaultTableModel) c.taboa3.getModel();
+            
+            try {
+                for (Object[] datos : ges.tablaC(taboa2.getValueAt(fila, 1).toString())) {
+                    ta.addRow(datos);
+                    
+                }  
+            } catch (IOException ex) {
+                Logger.getLogger(Canciones.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
+        }
+    }//GEN-LAST:event_btnMostrarCActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        Principal p = new Principal();
+        int fila = taboa2.getSelectedRow();
+
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(null, "Debes seleccionar un disco");
+        } else {
+
+            
+            InsertarCancion ins = new InsertarCancion();
+            ins.setVisible(true);
+            ins.txtCodigo.setText(taboa2.getValueAt(fila, 0).toString());
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+    
+
     /**
      * @param args the command line arguments
      */
@@ -247,15 +350,17 @@ public class Principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnInsertar2;
     private javax.swing.JButton btnInsetar;
+    private javax.swing.JButton btnMostrarC;
     private javax.swing.JButton btnMostrarD;
     private javax.swing.JButton btnSalir;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable taboa1;
-    private javax.swing.JTable taboa2;
+    public javax.swing.JTable taboa1;
+    public javax.swing.JTable taboa2;
     // End of variables declaration//GEN-END:variables
 }

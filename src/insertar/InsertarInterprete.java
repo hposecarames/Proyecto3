@@ -47,15 +47,12 @@ public class InsertarInterprete extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Insertar Interprete");
-        setPreferredSize(new java.awt.Dimension(328, 404));
 
         jLabel1.setText("Nombre:");
 
         jLabel2.setText("Genero:");
 
         cbGenero.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pop", "Rap", "Rock", "Electrónica", "Clasica" }));
-
-        etImagen.setText("Imagen");
 
         btnImagen.setText("Seleccionar Imagen");
         btnImagen.addActionListener(new java.awt.event.ActionListener() {
@@ -111,7 +108,7 @@ public class InsertarInterprete extends javax.swing.JFrame {
                         .addGap(0, 86, Short.MAX_VALUE)))
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(118, 118, 118)
+                .addGap(102, 102, 102)
                 .addComponent(etImagen)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -128,7 +125,7 @@ public class InsertarInterprete extends javax.swing.JFrame {
                     .addComponent(cbGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(etImagen)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 198, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 213, Short.MAX_VALUE)
                 .addComponent(etRuta)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnImagen)
